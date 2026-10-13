@@ -2,31 +2,31 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Hasta Yapısı
+
 typedef struct Hasta {
     int id;
     char ad[50];
-    char durum[20]; // "bekliyor", "muayenede", "tamamlandi"
+    char durum[20]; 
     struct Hasta* next;
 } Hasta;
 
-// Kuyruk Yapısı (Queue - FIFO)
+
 typedef struct Queue {
     Hasta* front;
     Hasta* rear;
 } Queue;
 
-// Yığın Yapısı (Stack - LIFO)
+
 typedef struct Stack {
     Hasta* top;
 } Stack;
 
-// Bağlı Liste Yapısı (Linked List)
+
 typedef struct LinkedList {
     Hasta* head;
 } LinkedList;
 
-// --- Yardımcı Fonksiyonlar ---
+
 Hasta* hasta_olustur(int id, const char* ad, const char* durum) {
     Hasta* yeni = (Hasta*)malloc(sizeof(Hasta));
     if (yeni == NULL) {
@@ -40,7 +40,7 @@ Hasta* hasta_olustur(int id, const char* ad, const char* durum) {
     return yeni;
 }
 
-// --- Kuyruk (Queue) Fonksiyonları ---
+
 Queue* queue_olustur() {
     Queue* q = (Queue*)malloc(sizeof(Queue));
     q->front = q->rear = NULL;
@@ -83,7 +83,7 @@ void listele_kuyruk(Queue* q) {
     }
 }
 
-// --- Yığın (Stack) Fonksiyonları ---
+
 Stack* stack_olustur() {
     Stack* s = (Stack*)malloc(sizeof(Stack));
     s->top = NULL;
@@ -99,7 +99,7 @@ void push(Stack* s, Hasta* h) {
 
 Hasta* pop(Stack* s) {
     if (s->top == NULL) {
-        return NULL; // Yığın boş
+        return NULL; 
     }
     Hasta* temp = s->top;
     s->top = s->top->next;
@@ -120,7 +120,7 @@ void listele_yigin(Stack* s) {
     }
 }
 
-// --- Bağlı Liste (Linked List - Geçmiş) Fonksiyonları ---
+
 LinkedList* list_olustur() {
     LinkedList* l = (LinkedList*)malloc(sizeof(LinkedList));
     l->head = NULL;
@@ -156,32 +156,29 @@ void listele_gecmis(LinkedList* l) {
     }
 }
 
-// --- Ana Fonksiyon ---
+
 int main() {
     Queue* bekleyen_kuyrugu = queue_olustur();
     Stack* muayene_yigini = stack_olustur();
     LinkedList* tamamlanan_listesi = list_olustur();
 
-    // 1. Hastaları belirtilen sırayla sisteme kaydetme
     enqueue(bekleyen_kuyrugu, 1, "Ahmet");
     enqueue(bekleyen_kuyrugu, 2, "Mehmet");
     enqueue(bekleyen_kuyrugu, 3, "Ayse");
 
-    // 2. Ahmet'i muayeneye alıp muayenesini tamamlama
+  
     Hasta* h1 = dequeue(bekleyen_kuyrugu);
     push(muayene_yigini, h1);
     Hasta* h1_tamamlanan = pop(muayene_yigini);
     ekle_gecmis(tamamlanan_listesi, h1_tamamlanan);
 
-    // 3. Mehmet'i muayeneye alıp muayenesini tamamlama
+
     Hasta* h2 = dequeue(bekleyen_kuyrugu);
     push(muayene_yigini, h2);
     Hasta* h2_tamamlanan = pop(muayene_yigini);
     ekle_gecmis(tamamlanan_listesi, h2_tamamlanan);
 
-    // 4. Ayşe bekleme kuyruğunda bırakıldı.
-
-    // Beklenen Çıktıyı Ekrana Yazdırma
+ 
     printf("=== Tum Islemler Sonrasi ===\n\n");
     listele_kuyruk(bekleyen_kuyrugu);
     printf("\n");
